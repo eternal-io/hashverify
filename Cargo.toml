@@ -1,0 +1,18 @@
+[package]
+name = "hashverify"
+version = "0.1.0"
+edition = "2021"
+authors = ["K--Aethiax"]
+publish = true
+
+description = "Computes hash verification code that used in SMHasher."
+
+documentation = "https://docs.rs/hashverify"
+repository = "https://github.com/eternal-io/hashverify"
+license = "MIT OR Apache-2.0"
+
+
+[dev-dependencies]
+crc32c = "0.6.8"
+murmur3 = "0.5.2"
+siphasher = "1.0.1"
