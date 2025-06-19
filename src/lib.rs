@@ -1,6 +1,6 @@
 //! See [hashverify.c](https://gitlab.com/fwojcik/smhasher3/-/blob/34093a3a849cae8ae1293975b004a740d2372fd7/misc/hashverify.c) for reference.
 
-const INPUT: [u8; 255] = [
+const MESSAGE: [u8; 255] = [
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
     0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
     0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f,
@@ -21,24 +21,24 @@ const INPUT: [u8; 255] = [
 
 /// Computes hash verification code that used in SMHasher.
 ///
-/// - `bits_width`: Output width in bits. Must be no less than 32.
+/// - `result_bits`: The output width of the hash in bits.
 /// - `hash`: Function `hash(bytes: &[u8], seed: u64, out: &mut [u8])`.
 ///
 /// # Panics
 ///
-/// If `bits_width` is less than 32 or not a multiple of 8.
-pub fn compute(bits_width: usize, hash: impl Fn(&[u8], u64, &mut [u8])) -> u32 {
-    assert!(bits_width % 8 == 0);
+/// Panics if `result_bits` is less than 32 or not a multiple of 8.
+pub fn compute(result_bits: usize, hash: impl Fn(&[u8], u64, &mut [u8])) -> u32 {
+    assert!(result_bits >= 32 && result_bits % 8 == 0);
 
-    let bytes_width = bits_width / 8;
-    let mut outs = vec![0u8; bytes_width * 256];
-    let mut out1 = vec![0u8; bytes_width];
+    let result_bytes = result_bits / 8;
+    let mut outs = vec![0u8; result_bytes * 256];
+    let mut out1 = vec![0u8; result_bytes];
 
     for i in 0..256 {
         hash(
-            &INPUT[0..i],
+            &MESSAGE[0..i],
             256 - i as u64,
-            &mut outs[bytes_width * i..][..bytes_width],
+            &mut outs[result_bytes * i..][..result_bytes],
         );
     }
 
