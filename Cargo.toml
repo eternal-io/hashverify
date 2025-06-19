@@ -16,3 +16,6 @@ license = "MIT OR Apache-2.0"
 crc32c = "0.6.8"
 murmur3 = "0.5.2"
 siphasher = "1.0.1"
+
+[profile.test]
+opt-level = 3
